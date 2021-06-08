@@ -1,5 +1,8 @@
 package br.com.zup.zupacademy.daniel.proposta.proposta;
 
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraClient;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraRequest;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +20,15 @@ public class PropostaController {
 
     @Autowired
     private PropostaRepository propostaRepository;
+    @Autowired
+    private AnaliseFinanceiraClient analiseFinanceiraClient;
 
     @PostMapping
     public ResponseEntity<?> cadastraProposta(@RequestBody @Valid PropostaRequest request, UriComponentsBuilder uriComponentsBuilder) {
-        Proposta proposta = request.converte();
-        propostaRepository.save(proposta);
+        Proposta proposta = propostaRepository.save(request.converte());
+        AnaliseFinanceiraResponse respostaAnalise = analiseFinanceiraClient.obtemResultadoSolicitacao(new AnaliseFinanceiraRequest(proposta));
+        proposta.setStatusAnalise(respostaAnalise.obtemStatusAnaliseDeResultadoSolicitacao());
         URI uri = uriComponentsBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(proposta);
     }
 }

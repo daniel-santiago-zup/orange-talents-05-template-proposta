@@ -30,6 +30,7 @@ public class Proposta {
     @NotNull
     @Positive
     private BigDecimal salario;
+    private StatusAnalise statusAnalise;
 
     @Deprecated
     public Proposta() {}
@@ -45,4 +46,17 @@ public class Proposta {
     public Long getId() {
         return id;
     }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setStatusAnalise(StatusAnalise statusAnalise) {
+        this.statusAnalise = statusAnalise;
+    }
+
 }
