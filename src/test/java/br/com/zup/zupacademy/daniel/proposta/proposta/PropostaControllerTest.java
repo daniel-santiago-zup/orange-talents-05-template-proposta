@@ -7,25 +7,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
+@Rollback
 @AutoConfigureMockMvc
 @SpringBootTest
 class PropostaControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     JsonMapper mapper = new JsonMapper();
 
     @BeforeEach
@@ -78,5 +82,35 @@ class PropostaControllerTest {
         )
                 .andExpect(MockMvcResultMatchers.status().is(201))
                 .andExpect(MockMvcResultMatchers.header().exists("Location"));
+    }
+
+    @Test
+    void deveFalharAoTentarCadastrarUmProdutoRepetido() throws Exception {
+        ObjectNode propostaNode = mapper.createObjectNode();
+        propostaNode.put("documento","583.568.980-21");
+        propostaNode.put("email","email@email.com");
+        propostaNode.put("nome","john");
+        propostaNode.put("endereco","rua dos johns, 95");
+        propostaNode.put("salario","2300");
+
+        String propostaJson = propostaNode.toPrettyString();
+
+        URI uri = URI.create("/proposta");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(uri)
+                        .content(propostaJson)
+                        .contentType("application/json")
+        )
+                .andExpect(MockMvcResultMatchers.status().is(201))
+                .andExpect(MockMvcResultMatchers.header().exists("Location"));
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post(uri)
+                        .content(propostaJson)
+                        .contentType("application/json")
+        )
+                .andExpect(MockMvcResultMatchers.status().is(422));
     }
 }
