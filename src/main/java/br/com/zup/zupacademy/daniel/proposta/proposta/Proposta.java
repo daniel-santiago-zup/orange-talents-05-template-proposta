@@ -54,19 +54,32 @@ public class Proposta {
         return nome;
     }
 
-    public void setStatusAnalise(StatusAnalise statusAnalise) {
-        this.statusAnalise = statusAnalise;
-    }
-
     public StatusAnalise getStatusAnalise() {
         return statusAnalise;
+    }
+
+    public String getIdCartao() {
+        return idCartao;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
+    }
+
+    public void setStatusAnalise(StatusAnalise statusAnalise) {
+        this.statusAnalise = statusAnalise;
     }
 
     public void setIdCartao(String idCartao) {
         this.idCartao = idCartao;
     }
 
-    public String getIdCartao() {
-        return idCartao;
-    }
 }
