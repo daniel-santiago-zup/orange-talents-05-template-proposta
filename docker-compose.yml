@@ -93,6 +93,31 @@ services:
       KAFKA_HOST: "kafka:29092"
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
 
+  propostas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zupacademy/propostas
+    depends_on:
+      - grafana
+      - prometheus
+      - jaeger
+      - kafka
+      - zookeeper
+      - contas
+      - analise
+      - transacoes
+      - postgres
+      - keycloak
+    ports:
+    - 8080:8080
+    environment:
+      CARTAO_URL: http://contas:8888/api/cartoes
+      ANALISE_SOLICITACAO_URL: http://analise:9999/api/solicitacao
+      DB_URL: jdbc:postgresql://postgres:5432/proposta
+      KEYCLOAK_ISSUER_URI: http://localhost:18080/auth/realms/api-bancaria
+      KEYCLOAK_JWKS_URI: http://keycloak:8080/auth/realms/api-bancaria/protocol/openid-connect/certs
+
   jaeger:
     image: jaegertracing/all-in-one
     ports:
