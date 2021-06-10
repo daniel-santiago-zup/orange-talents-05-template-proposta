@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY pom.xml .
 RUN mvn dependency:resolve
 COPY src ./src
-RUN mvn package
+RUN mvn package -DskipTests
 
 FROM adoptopenjdk/openjdk11:alpine
 RUN addgroup -S spring && adduser -S spring
