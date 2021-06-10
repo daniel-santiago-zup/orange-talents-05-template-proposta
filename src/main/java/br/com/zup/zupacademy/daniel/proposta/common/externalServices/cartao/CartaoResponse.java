@@ -8,7 +8,7 @@ public class CartaoResponse {
     private String id;
     private LocalDateTime emitidoEm;
     private String titular;
-    private Set<BloqueioCartao> bloqueios;
+    private Set<BloqueioCartaoLegado> bloqueios;
     private Set<AvisoCartao> avisos;
     private Set<CarteiraCartao> carteiras;
     private Set<ParcelaCartao> parcelas;
@@ -20,7 +20,7 @@ public class CartaoResponse {
     public CartaoResponse(String id,
                           LocalDateTime emitidoEm,
                           String titular,
-                          Set<BloqueioCartao> bloqueios,
+                          Set<BloqueioCartaoLegado> bloqueios,
                           Set<AvisoCartao> avisos,
                           Set<CarteiraCartao> carteiras,
                           Set<ParcelaCartao> parcelas,
