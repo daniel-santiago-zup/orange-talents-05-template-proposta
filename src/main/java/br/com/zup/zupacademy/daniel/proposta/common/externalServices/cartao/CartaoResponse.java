@@ -1,5 +1,7 @@
 package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao;
 
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.modelo.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;

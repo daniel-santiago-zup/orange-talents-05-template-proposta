@@ -1,9 +1,7 @@
 package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "cartao", url = "${cartao_url}")
 public interface CartaoClient {
@@ -13,4 +11,7 @@ public interface CartaoClient {
 
     @GetMapping("/{idCartao}")
     CartaoResponse obtemCartaoPorId(@PathVariable String idCartao);
+
+    @PostMapping(value = "/{idCartao}/bloqueios")
+    BloqueioCartaoLegadoReponse registraNovoBloqueio(BloqueioCartaoLegadoRequest bloqueioCartaoLegadoRequest, @PathVariable String idCartao);
 }
