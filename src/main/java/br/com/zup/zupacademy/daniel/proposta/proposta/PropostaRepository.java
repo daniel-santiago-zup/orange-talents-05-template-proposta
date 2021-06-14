@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface PropostaRepository extends CrudRepository<Proposta, Long> {
-    @Query("select p from Proposta p where p.statusAnalise = 'ELEGIVEL' and p.idCartao = null")
+    @Query("select p from Proposta p where p.statusAnalise = 'ELEGIVEL' and p.cartao = null")
     List<Proposta> encontraPropostasElegiveisSemCartao();
 }

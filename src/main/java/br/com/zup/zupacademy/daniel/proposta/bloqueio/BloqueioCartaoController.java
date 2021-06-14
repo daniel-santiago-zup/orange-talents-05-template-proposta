@@ -1,9 +1,10 @@
 package br.com.zup.zupacademy.daniel.proposta.bloqueio;
 
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.BloqueioCartaoLegadoReponse;
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.BloqueioCartaoLegadoRequest;
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.CartaoClient;
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.CartaoResponse;
+import br.com.zup.zupacademy.daniel.proposta.cartao.Cartao;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.BloqueioCartaoLegadoReponse;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.BloqueioCartaoLegadoRequest;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoClient;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoResponse;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,7 @@ public class BloqueioCartaoController {
     @Autowired
     BloqueioCartaoRepository bloqueiCartaoRepository;
     @Autowired
-    CartaoClient cartaoClient;
-
+    CartaoLegadoClient cartaoLegadoClient;
 
     @PostMapping("/{idCartao}")
     @Transactional
@@ -31,19 +31,23 @@ public class BloqueioCartaoController {
                                                          @RequestHeader(value = "User-Agent") String userAgent,
                                                          HttpServletRequest request,
                                                          UriComponentsBuilder uriComponentsBuilder) {
+        Cartao cartao;
         try {
-            CartaoResponse cartaoResponse = cartaoClient.obtemCartaoPorId(idCartao);
+            CartaoLegadoResponse cartaoLegadoResponse = cartaoLegadoClient.obtemCartaoPorId(idCartao);
+            cartao = cartaoLegadoResponse.converte();
         } catch (FeignException.NotFound e) {
             return ResponseEntity.notFound().build();
         }
-        if (!bloqueiCartaoRepository.cartoesBloquados(idCartao).isEmpty()) {
+
+        if (cartao.getBloqueado()) {
             return ResponseEntity.unprocessableEntity().body("Cartão já está bloqueado!");
         }
-        BloqueioCartao bloqueioCartao = new BloqueioCartao(idCartao,request.getRemoteAddr(),userAgent);
+        BloqueioCartao bloqueioCartao = new BloqueioCartao(cartao,request.getRemoteAddr(),userAgent);
 
         try {
-            BloqueioCartaoLegadoReponse bloqueioCartaoLegadoReponse = cartaoClient.registraNovoBloqueio(new BloqueioCartaoLegadoRequest("propostas"),idCartao);
+            BloqueioCartaoLegadoReponse bloqueioCartaoLegadoReponse = cartaoLegadoClient.registraNovoBloqueio(new BloqueioCartaoLegadoRequest("propostas"),idCartao);
             bloqueioCartao.setStatusBloqueio(bloqueioCartaoLegadoReponse.retornaStatusBloqueio());
+            cartao.setBloqueado(bloqueioCartaoLegadoReponse.retornaStatusBloqueio().equals(StatusBloqueio.BLOQUEADO));
         } catch (FeignException.UnprocessableEntity e) {
             if (e.responseBody().isPresent() && e.responseBody().get().toString().contains("FALHA")) {
                 return ResponseEntity.unprocessableEntity().body("Cartão já está bloqueado");

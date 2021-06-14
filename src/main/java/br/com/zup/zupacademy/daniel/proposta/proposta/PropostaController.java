@@ -3,7 +3,7 @@ package br.com.zup.zupacademy.daniel.proposta.proposta;
 import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraClient;
 import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraRequest;
 import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFinanceira.AnaliseFinanceiraResponse;
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.CartaoClient;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoClient;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class PropostaController {
     @Autowired
     private AnaliseFinanceiraClient analiseFinanceiraClient;
     @Autowired
-    private CartaoClient cartaoClient;
+    private CartaoLegadoClient cartaoLegadoClient;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> detalhaProposta (@PathVariable Long id) {
@@ -46,9 +46,10 @@ public class PropostaController {
             proposta.setStatusAnalise(respostaAnalise.obtemStatusAnaliseDeResultadoSolicitacao());
         } catch (FeignException.UnprocessableEntity e) {
             proposta.setStatusAnalise(StatusAnalise.NAO_ELEGIVEL);
-            return ResponseEntity.created(uri).body(proposta);
+            return ResponseEntity.created(uri).build();
         }
 
-        return ResponseEntity.created(uri).body(proposta);
+        propostaRepository.save(proposta);
+        return ResponseEntity.created(uri).build();
     }
 }

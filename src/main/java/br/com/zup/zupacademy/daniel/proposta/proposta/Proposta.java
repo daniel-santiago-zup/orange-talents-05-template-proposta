@@ -1,5 +1,6 @@
 package br.com.zup.zupacademy.daniel.proposta.proposta;
 
+import br.com.zup.zupacademy.daniel.proposta.cartao.Cartao;
 import br.com.zup.zupacademy.daniel.proposta.common.validators.CPFouCNPJ;
 
 import javax.persistence.*;
@@ -29,7 +30,8 @@ public class Proposta {
     private BigDecimal salario;
     @Enumerated(EnumType.STRING)
     private StatusAnalise statusAnalise;
-    private String idCartao;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Cartao cartao;
 
     @Deprecated
     public Proposta() {}
@@ -59,7 +61,7 @@ public class Proposta {
     }
 
     public String getIdCartao() {
-        return idCartao;
+        return cartao != null ? cartao.getId() : null;
     }
 
     public String getEmail() {
@@ -78,8 +80,7 @@ public class Proposta {
         this.statusAnalise = statusAnalise;
     }
 
-    public void setIdCartao(String idCartao) {
-        this.idCartao = idCartao;
+    public void setCartao(Cartao cartao) {
+        this.cartao = cartao;
     }
-
 }

@@ -1,16 +1,16 @@
-package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao;
+package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "cartao", url = "${cartao_url}")
-public interface CartaoClient {
+public interface CartaoLegadoClient {
 
     @GetMapping
-    CartaoResponse obtemCartaoGerado(@RequestParam Long idProposta);
+    CartaoLegadoResponse obtemCartaoGerado(@RequestParam Long idProposta);
 
     @GetMapping("/{idCartao}")
-    CartaoResponse obtemCartaoPorId(@PathVariable String idCartao);
+    CartaoLegadoResponse obtemCartaoPorId(@PathVariable String idCartao);
 
     @PostMapping(value = "/{idCartao}/bloqueios")
     BloqueioCartaoLegadoReponse registraNovoBloqueio(BloqueioCartaoLegadoRequest bloqueioCartaoLegadoRequest, @PathVariable String idCartao);

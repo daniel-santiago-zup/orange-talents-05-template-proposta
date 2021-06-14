@@ -1,7 +1,7 @@
 package br.com.zup.zupacademy.daniel.proposta.bimetria;
 
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.CartaoClient;
-import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.CartaoResponse;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoClient;
+import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoResponse;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ public class BiometriaController {
     @Autowired
     BiometriaRepository biometriaRepository;
     @Autowired
-    CartaoClient cartaoClient;
+    CartaoLegadoClient cartaoLegadoClient;
 
     @PostMapping("/{idCartao}")
     public ResponseEntity<?> cadastraBiometria(@PathVariable String idCartao, @RequestBody @Valid BiometriaRequest request, UriComponentsBuilder uriComponentsBuilder) {
         try {
-            CartaoResponse cartaoResponse = cartaoClient.obtemCartaoPorId(idCartao);
+            CartaoLegadoResponse cartaoLegadoResponse = cartaoLegadoClient.obtemCartaoPorId(idCartao);
         } catch (FeignException.NotFound e) {
             return ResponseEntity.notFound().build();
         }

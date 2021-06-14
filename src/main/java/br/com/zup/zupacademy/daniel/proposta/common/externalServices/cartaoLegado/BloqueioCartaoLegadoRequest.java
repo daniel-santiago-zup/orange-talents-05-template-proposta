@@ -1,4 +1,4 @@
-package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao;
+package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado;
 
 import javax.validation.constraints.NotBlank;
 

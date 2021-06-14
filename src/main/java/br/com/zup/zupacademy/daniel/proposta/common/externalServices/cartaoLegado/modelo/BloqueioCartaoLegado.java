@@ -1,4 +1,4 @@
-package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartao.modelo;
+package br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.modelo;
 
 import java.time.LocalDateTime;
 

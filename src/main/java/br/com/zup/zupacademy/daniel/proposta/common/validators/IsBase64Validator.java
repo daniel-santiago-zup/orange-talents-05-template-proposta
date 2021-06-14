@@ -1,9 +1,9 @@
 package br.com.zup.zupacademy.daniel.proposta.common.validators;
 
-import org.apache.tomcat.util.codec.binary.Base64;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class IsBase64Validator implements ConstraintValidator<IsBase64,String> {
 
@@ -14,6 +14,9 @@ public class IsBase64Validator implements ConstraintValidator<IsBase64,String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return Base64.isBase64(s);
+        byte[] decodedBase64 = Base64.getDecoder().decode(s);
+        String reEncodedBase64 = Base64.getEncoder().encodeToString(decodedBase64);
+
+        return reEncodedBase64.equals(s);
     }
 }
