@@ -12,6 +12,9 @@ public interface CartaoLegadoClient {
     @GetMapping("/{idCartao}")
     CartaoLegadoResponse obtemCartaoPorId(@PathVariable String idCartao);
 
-    @PostMapping(value = "/{idCartao}/bloqueios")
+    @PostMapping("/{idCartao}/bloqueios")
     BloqueioCartaoLegadoReponse registraNovoBloqueio(BloqueioCartaoLegadoRequest bloqueioCartaoLegadoRequest, @PathVariable String idCartao);
+
+    @PostMapping("/{idCartao}/avisos")
+    NotificacaoViagemLegadoResponse registraNotificacaoViagem(NotificacaoViagemLegadoRequest notificacaoViagemLegadoRequest, @PathVariable String idCartao);
 }

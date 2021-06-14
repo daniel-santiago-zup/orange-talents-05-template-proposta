@@ -40,4 +40,12 @@ public class NotificacaoViagem {
     public Long getId() {
         return id;
     }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public LocalDate getDataRetorno() {
+        return dataRetorno;
+    }
 }
