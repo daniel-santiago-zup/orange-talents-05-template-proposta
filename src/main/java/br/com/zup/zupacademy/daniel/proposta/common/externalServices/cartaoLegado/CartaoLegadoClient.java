@@ -17,4 +17,7 @@ public interface CartaoLegadoClient {
 
     @PostMapping("/{idCartao}/avisos")
     NotificacaoViagemLegadoResponse registraNotificacaoViagem(NotificacaoViagemLegadoRequest notificacaoViagemLegadoRequest, @PathVariable String idCartao);
+
+    @PostMapping("/{idCartao}/carteiras")
+    CarteiraLegadoResponse registraCarteiraDigital(CarteiraLegadoRequest carteiraLegadoRequest, @PathVariable String idCartao);
 }
