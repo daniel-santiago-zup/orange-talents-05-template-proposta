@@ -19,7 +19,7 @@ public class AssociaCartao {
     CartaoLegadoClient cartaoLegadoClient;
 
     @Scheduled(fixedDelay = 5000)
-    private void associaCartao() {
+    protected void associaCartao() {
         List<Proposta> propostasElegiveis = propostaRepository.encontraPropostasElegiveisSemCartao();
         propostasElegiveis.forEach(proposta -> {
             CartaoLegadoResponse cartaoLegadoResponse = cartaoLegadoClient.obtemCartaoGerado(proposta.getId());
