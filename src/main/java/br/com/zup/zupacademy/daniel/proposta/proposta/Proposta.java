@@ -2,6 +2,10 @@ package br.com.zup.zupacademy.daniel.proposta.proposta;
 
 import br.com.zup.zupacademy.daniel.proposta.cartao.Cartao;
 import br.com.zup.zupacademy.daniel.proposta.common.validators.CPFouCNPJ;
+import br.com.zup.zupacademy.daniel.proposta.common.validators.EncodadoComBCrypt;
+import br.com.zup.zupacademy.daniel.proposta.common.validators.EncodadoComBCryptValidator;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -15,8 +19,8 @@ public class Proposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @CPFouCNPJ
     @NotBlank
+    @EncodadoComBCrypt
     private String documento;
     @Email
     @NotBlank
@@ -36,8 +40,11 @@ public class Proposta {
     @Deprecated
     public Proposta() {}
 
-    public Proposta(String documento, String email, String nome, String endereco, BigDecimal salario) {
-        this.documento = documento;
+    public Proposta(String salt,String documento, String email, String nome, String endereco, BigDecimal salario) {
+        if (new EncodadoComBCryptValidator().isValid(documento,null)) {
+            throw new IllegalArgumentException("Esta classe deve receber um documento não encodado");
+        }
+        this.documento = BCrypt.hashpw(documento, salt);
         this.email = email;
         this.nome = nome;
         this.endereco = endereco;

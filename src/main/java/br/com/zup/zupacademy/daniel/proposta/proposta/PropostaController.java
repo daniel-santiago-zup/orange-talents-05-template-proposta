@@ -6,6 +6,7 @@ import br.com.zup.zupacademy.daniel.proposta.common.externalServices.analiseFina
 import br.com.zup.zupacademy.daniel.proposta.common.externalServices.cartaoLegado.CartaoLegadoClient;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ public class PropostaController {
     private AnaliseFinanceiraClient analiseFinanceiraClient;
     @Autowired
     private CartaoLegadoClient cartaoLegadoClient;
+    @Value("${security.salt}")
+    private String salt;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> detalhaProposta (@PathVariable Long id) {
@@ -38,7 +41,7 @@ public class PropostaController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> cadastraProposta(@RequestBody @Valid PropostaRequest request, UriComponentsBuilder uriComponentsBuilder) {
-        Proposta proposta = propostaRepository.save(request.converte());
+        Proposta proposta = propostaRepository.save(request.converte(salt));
         URI uri = uriComponentsBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
 
         try {

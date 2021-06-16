@@ -27,7 +27,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 
         @Override
         public Collection<GrantedAuthority> convert(Jwt jwt) {
-            Collection<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
+            Collection<GrantedAuthority> grantedAuthorities = new HashSet<>();
             jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
             jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
             grantedAuthorities.addAll(jwtGrantedAuthoritiesConverter.convert(jwt));
@@ -57,7 +57,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
                         .antMatchers(HttpMethod.POST,"/bloqueio-cartao/**").hasAuthority("SCOPE_bloqueio-cartao:write")
                         .antMatchers(HttpMethod.GET, "/actuator/prometheus").permitAll()
                         .antMatchers(HttpMethod.GET, "/actuator/**").hasAuthority("ROLE_metrics")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer().jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());

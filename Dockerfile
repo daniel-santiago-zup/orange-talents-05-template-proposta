@@ -2,8 +2,7 @@
 FROM maven:3.6.3-jdk-11 AS builder
 WORKDIR /usr/src/app
 COPY pom.xml .
-RUN mvn dependency:resolve
-RUN mvn dependency:resolve-plugins
+RUN mvn dependency:resolve && mvn dependency:resolve-plugins
 COPY src ./src
 RUN mvn package -DskipTests
 

@@ -3,6 +3,7 @@ package br.com.zup.zupacademy.daniel.proposta.proposta;
 import br.com.zup.zupacademy.daniel.proposta.common.validators.CPFouCNPJ;
 import br.com.zup.zupacademy.daniel.proposta.common.validators.ValorUnico;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -34,7 +35,7 @@ public class PropostaRequest {
         this.salario = salario;
     }
 
-    public Proposta converte() {
-        return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
+    public Proposta converte(String salt) {
+        return new Proposta(salt, this.documento, this.email, this.nome, this.endereco, this.salario);
     }
 }
