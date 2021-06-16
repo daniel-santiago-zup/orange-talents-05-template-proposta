@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -54,6 +55,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
                         .antMatchers(HttpMethod.POST,"/proposta/**").hasAuthority("SCOPE_proposta:write")
                         .antMatchers(HttpMethod.POST,"/biometria/**").hasAuthority("SCOPE_biometria:write")
                         .antMatchers(HttpMethod.POST,"/bloqueio-cartao/**").hasAuthority("SCOPE_bloqueio-cartao:write")
+                        .antMatchers(HttpMethod.GET, "/actuator/prometheus").permitAll()
                         .antMatchers(HttpMethod.GET, "/actuator/**").hasAuthority("ROLE_metrics")
                         .anyRequest().permitAll()
                 )
